@@ -1,26 +1,29 @@
+import React from "react"
 import Task from "../task"
 
-export const TaskList = ({ todos }) => {
+export class TaskList extends React.Component {
 
-    const tasks = todos.map(task => {
-        const {id, completed, ...taskProps} = task
-        let taskClass = 'task-list__task task';
+    render() {
+        const { todos, onDeleted, onToggleCompleted, onToggleEditing } = this.props;
 
-        if(completed) {
-            taskClass += ' task--completed';
-        } else if(taskProps.editing) {
-            taskClass += ' task--editing';
-        }
+        const tasks = todos.map(task => {
+            const {id, ...taskProps} = task
+            return (
+                <Task 
+                    key={id} 
+                    { ...taskProps } 
+                    onDeleted={() => onDeleted(id)}
+                    onToggleCompleted={() => onToggleCompleted(id)}
+                    onToggleEditing={() => onToggleEditing(id)}
+                />
+            );
+        });
 
         return (
-            <li key={id} className={taskClass}>
-                <Task {...taskProps}/>
-            </li>
-        )
-    })
-    return (
-        <ul className="task-list">
-            {tasks}
-        </ul>
-    )
+            <ul className="task-list">
+                {tasks}
+            </ul>
+        );
+    }
 }
+

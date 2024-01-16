@@ -1,4 +1,4 @@
-.task-filter {
+.footer {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -10,7 +10,7 @@
 	color: gray;
 }
 
-.task-filter:before {
+.footer:before {
 	content: '';
 	position: absolute;
 	z-index: -1;
@@ -58,15 +58,15 @@
 	color: #737373;
 }
 
-.task-filter__task-count {
+.footer__task-count {
 	text-align: left;
 }
 
-.task-filter__task-count strong {
+.footer__task-count strong {
 	font-weight: 300;
 }
 
-.task-filter__filters {
+.footer__task-filter {
 	margin: 0;
 	padding: 0;
 	list-style: none;
@@ -74,12 +74,12 @@
 	left: 0;
 }
 
-.task-filter__filters li {
+.footer__task-filter li {
 	display: inline;
 	cursor: default;
 }
 
-.task-filter__filters li button {
+.footer__task-filter li button {
 	display: inline-block;
 	color: inherit;
 	margin: 3px;
@@ -89,27 +89,27 @@
 	border-radius: 3px;
 }
 
-.task-filter__filters li button:not(.selected) {
+.footer__task-filter li button:not(.selected) {
 	cursor: pointer;
 }
 
-.task-filter__filters li:hover button {
+.footer__task-filter li:hover button {
 	border-color: rgba(175, 47, 47, 0.1);
 }
 
-.task-filter__filters li button.selected {
+.footer__task-filter li button.selected {
 	border-color: rgba(175, 47, 47, 0.2);
 }
 
-.task-filter__clear-completed,
-html .task-filter__clear-completed:active {
+.footer__clear-completed,
+html .footer__clear-completed:active {
 	position: relative;
 	line-height: 20px;
 	text-decoration: none;
 	cursor: pointer;
 }
 
-.task-filter__clear-completed:hover {
+.footer__clear-completed:hover {
 	text-decoration: underline;
 }
 

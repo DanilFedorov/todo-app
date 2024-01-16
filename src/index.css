@@ -65,7 +65,7 @@ button::-moz-focus-inner {
 		height: 50px;
 	}
 
-	.filters {
+	.task-filter {
 		bottom: 10px;
 	}
 }
