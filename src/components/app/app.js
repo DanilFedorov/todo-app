@@ -14,14 +14,48 @@ export class App extends React.Component {
                 this.createTask('Drink Coffee'),
                 this.createTask('Build React App'),
                 this.createTask('Have Lunch'),
-            ]
+            ],
+            selectedFilter: 'all',
         };
 
-        this.deleteTask = this.deleteTask.bind(this);
-        this.addTask = this.addTask.bind(this);
-        this.toggleCompleted = this.toggleCompleted.bind(this);
-        this.toggleEditing = this.toggleEditing.bind(this);
+        this.deleteTask = this.deleteTask.bind(this);  
+        this.addTask = this.addTask.bind(this);  
+        this.toggleCompleted = this.toggleCompleted.bind(this);  
+        this.toggleEditing = this.toggleEditing.bind(this);  
+        this.onFilterChange = this.onFilterChange.bind(this); 
+        this.onClearCompleted = this.onClearCompleted.bind(this);
     }
+
+    onClearCompleted() {
+        this.state.todoData.forEach(task => {
+            if(task.completed) {
+               this.deleteTask(task.id)
+            }
+        });
+    };
+  
+    onFilterChange(filter) {
+        this.setState({ selectedFilter: filter });
+    
+        this.setState(({ todoData }) => {
+            let newTodoData = todoData.map(item => {
+                switch (filter) {
+                    case 'all':
+                        return { ...item, hidden: false };
+                    case 'active':
+                        return { ...item, hidden: item.completed };
+                    case 'completed':
+                        return { ...item, hidden: !item.completed };
+                    default:
+                        return item;
+                }
+            });
+    
+            return {
+                todoData: newTodoData
+            };
+        });
+    };
 
     deleteTask(id) {
         this.setState(({ todoData }) => {
@@ -41,6 +75,7 @@ export class App extends React.Component {
             label,
             completed: false,
             editing: false,
+            hidden: false,
             id: this.maxId++
         };
     };
@@ -97,7 +132,10 @@ export class App extends React.Component {
                         onDeleted={ this.deleteTask }
                         onToggleCompleted={ this.toggleCompleted }
                         onToggleEditing={ this.toggleEditing }/>
-                    <Footer todoCount={ todoCount }/>
+                    <Footer 
+                        todoCount={ todoCount }
+                        onFilterChange={ this.onFilterChange }
+                        onClearCompleted={ this.onClearCompleted }/>
                 </section>
             </section>
         )

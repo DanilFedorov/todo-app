@@ -1,11 +1,20 @@
 import React from "react";
 
 export const Task = (props) => {
-    const { label, completed, editing, taskLifeTime, onDeleted, onToggleCompleted, onToggleEditing } = props;
+    const { label, completed, editing, hidden, taskLifeTime, onDeleted, onToggleCompleted, onToggleEditing } = props;
 
     let taskClass = "task-list__task task";
-    let taskCLassEditing = taskClass + " task--editing";
-    let taskCLassCompleted = taskClass + " task--completed";
+    const taskCLassEditing = taskClass + " task--editing";
+    const taskCLassCompleted = taskClass + " task--completed";
+    const taskHidden = {
+      display: 'none',
+    };
+
+    if (hidden) {
+      return (
+        <li style={taskHidden}></li>
+      );
+    }
 
     if (completed) {
       taskClass = taskCLassCompleted;
