@@ -13,6 +13,15 @@ const toggleProperty = (arr, id, propName) => {
 	return [...arr.slice(0, taskIndex), newTask, ...arr.slice(taskIndex + 1)]
 }
 
+const changeProperty = (arr, id, propName, propValue) => {
+	const taskIndex = arr.findIndex((el) => el.id === id)
+
+	const oldTask = arr[taskIndex]
+	const newTask = { ...oldTask, [propName]: propValue }
+
+	return [...arr.slice(0, taskIndex), newTask, ...arr.slice(taskIndex + 1)]
+}
+
 export default class App extends React.Component {
 	currentId = 10
 
@@ -29,6 +38,16 @@ export default class App extends React.Component {
 		this.toggleEditing = this.toggleEditing.bind(this)
 		this.onFilterChange = this.onFilterChange.bind(this)
 		this.onClearCompleted = this.onClearCompleted.bind(this)
+		this.onEditTask = this.onEditTask.bind(this)
+	}
+
+	onEditTask(id, text) {
+		this.setState(({ todoData }) => {
+			const newTodoData = toggleProperty(todoData, id, "editing")
+			return {
+				todoData: changeProperty(newTodoData, id, "label", text),
+			}
+		})
 	}
 
 	onClearCompleted() {
@@ -123,6 +142,7 @@ export default class App extends React.Component {
 						onDeleted={this.deleteTask}
 						onToggleCompleted={this.toggleCompleted}
 						onToggleEditing={this.toggleEditing}
+						onEditTask={this.onEditTask}
 					/>
 					<Footer
 						todoCount={todoCount}

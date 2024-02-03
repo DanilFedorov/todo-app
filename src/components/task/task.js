@@ -2,49 +2,77 @@ import React from "react"
 import PropTypes from "prop-types"
 import { formatDistanceToNow } from "date-fns"
 
-export function Task(props) {
-	const { label, completed, editing, hidden, createdAt, onDeleted, onToggleCompleted, onToggleEditing } = props
-	const timeAgo = formatDistanceToNow(createdAt, { addSuffix: true })
+export class Task extends React.Component {
+	constructor(props) {
+		super(props)
 
-	let taskClass = "task-list__task task"
-	const taskCLassEditing = `${taskClass} task--editing`
-	const taskCLassCompleted = `${taskClass} task--completed`
-	const taskHidden = {
-		display: "none",
+		this.state = {
+			inputText: "",
+		}
+
+		this.handleInputChange = this.handleInputChange.bind(this)
+		this.onSubmit = this.onSubmit.bind(this)
 	}
 
-	if (hidden) {
-		return <li style={taskHidden} />
+	handleInputChange(e) {
+		this.setState({ inputText: e.target.value })
 	}
 
-	if (completed) {
-		taskClass = taskCLassCompleted
+	onSubmit(e) {
+		if (this.state.inputText) {
+			this.props.onEditTask(this.props.id, this.state.inputText)
+			this.setState({ inputText: "" })
+		}
+
+		e.preventDefault()
 	}
 
-	if (editing) {
+	render() {
+		const { label, completed, editing, hidden, createdAt, onDeleted, onToggleCompleted, onToggleEditing } = this.props
+		const timeAgo = formatDistanceToNow(createdAt, { addSuffix: true })
+
+		let taskClass = "task-list__task task"
+		const taskCLassEditing = `${taskClass} task--editing`
+		const taskCLassCompleted = `${taskClass} task--completed`
+		const taskHidden = {
+			display: "none",
+		}
+
+		if (hidden) {
+			return <li style={taskHidden} />
+		}
+
+		if (completed) {
+			taskClass = taskCLassCompleted
+		}
+
+		if (editing) {
+			return (
+				<li className={taskCLassEditing}>
+					<form onSubmit={this.onSubmit}>
+						<input type="text" className="task__edit" defaultValue={label} onChange={this.handleInputChange} />
+					</form>
+				</li>
+			)
+		}
 		return (
-			<li className={taskCLassEditing}>
-				<input type="text" className="task__edit" defaultValue={label} />
+			<li className={taskClass}>
+				<input
+					className="task__toggle"
+					type="checkbox"
+					checked={completed}
+					onChange={onToggleCompleted}
+					id={`checkbox-${label}`}
+				/>
+				<label className="task__label" htmlFor={`checkbox-${label}`}>
+					<span className="task__description">{label}</span>
+					<span className="task__created">Created {timeAgo}</span>
+				</label>
+				<button className="task__icon task__icon--edit" onClick={onToggleEditing} />
+				<button className="task__icon task__icon--destroy" onClick={onDeleted} />
 			</li>
 		)
 	}
-	return (
-		<li className={taskClass}>
-			<input
-				className="task__toggle"
-				type="checkbox"
-				checked={completed}
-				onChange={onToggleCompleted}
-				id={`checkbox-${label}`}
-			/>
-			<label className="task__label" htmlFor={`checkbox-${label}`}>
-				<span className="task__description">{label}</span>
-				<span className="task__created">Created {timeAgo}</span>
-			</label>
-			<button className="task__icon task__icon--edit" onClick={onToggleEditing} />
-			<button className="task__icon task__icon--destroy" onClick={onDeleted} />
-		</li>
-	)
 }
 
 Task.defaultProps = {
