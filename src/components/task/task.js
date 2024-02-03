@@ -7,7 +7,7 @@ export class Task extends React.Component {
 		super(props)
 
 		this.state = {
-			inputText: "",
+			inputText: this.props.label,
 		}
 
 		this.handleInputChange = this.handleInputChange.bind(this)
@@ -19,9 +19,10 @@ export class Task extends React.Component {
 	}
 
 	onSubmit(e) {
-		if (this.state.inputText) {
-			this.props.onEditTask(this.props.id, this.state.inputText)
-			this.setState({ inputText: "" })
+		const newLabel = this.state.inputText
+		if (newLabel) {
+			this.props.onEditTask(this.props.id, newLabel)
+			this.setState({ inputText: newLabel })
 		}
 
 		e.preventDefault()
