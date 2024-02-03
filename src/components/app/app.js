@@ -14,7 +14,7 @@ const toggleProperty = (arr, id, propName) => {
 }
 
 export default class App extends React.Component {
-	maxId = 100
+	currentId = 10
 
 	constructor() {
 		super()
@@ -42,6 +42,25 @@ export default class App extends React.Component {
 
 	onFilterChange(filter) {
 		this.setState({ selectedFilter: filter })
+
+		this.setState(({ todoData }) => {
+			let newTodoData = todoData.map((item) => {
+				switch (filter) {
+					case "all":
+						return { ...item, hidden: false }
+					case "active":
+						return { ...item, hidden: item.completed }
+					case "completed":
+						return { ...item, hidden: !item.completed }
+					default:
+						return item
+				}
+			})
+
+			return {
+				todoData: newTodoData,
+			}
+		})
 	}
 
 	deleteTask(id) {
@@ -60,7 +79,7 @@ export default class App extends React.Component {
 			completed: false,
 			editing: false,
 			hidden: false,
-			id: this.maxId + 1,
+			id: this.currentId++,
 			createdAt: new Date(),
 		}
 	}
@@ -94,27 +113,13 @@ export default class App extends React.Component {
 
 	render() {
 		const { todoData, selectedFilter } = this.state
-		let filteredTodos
-		switch (selectedFilter) {
-			case "all":
-				filteredTodos = todoData
-				break
-			case "active":
-				filteredTodos = todoData.filter((task) => !task.completed)
-				break
-			case "completed":
-				filteredTodos = todoData.filter((task) => task.completed)
-				break
-			default:
-				filteredTodos = todoData
-		}
-		const todoCount = filteredTodos.filter((el) => !el.completed).length
+		const todoCount = todoData.filter((el) => !el.completed).length
 		return (
 			<section className="todo-app">
 				<NewTaskForm addTask={this.addTask} />
 				<section className="todo-app__main">
 					<TaskList
-						todos={filteredTodos}
+						todos={todoData}
 						onDeleted={this.deleteTask}
 						onToggleCompleted={this.toggleCompleted}
 						onToggleEditing={this.toggleEditing}

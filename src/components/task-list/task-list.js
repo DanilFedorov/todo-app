@@ -31,7 +31,7 @@ TaskList.defaultProps = {
 }
 
 TaskList.propTypes = {
-	id: PropTypes.number.isRequired,
+	id: PropTypes.number,
 	todos: PropTypes.arrayOf(PropTypes.object).isRequired,
 	onDeleted: PropTypes.func,
 	onToggleCompleted: PropTypes.func,
