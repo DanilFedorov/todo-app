@@ -1,3 +1,4 @@
-import { Task } from './task'
-import './task.css'
-export default Task;
+import { Task } from "./task"
+import "./task.css"
+
+export default Task
